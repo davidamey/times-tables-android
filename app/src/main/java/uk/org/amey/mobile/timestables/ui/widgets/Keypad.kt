@@ -1,5 +1,6 @@
 package uk.org.amey.mobile.timestables.ui.widgets
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -19,6 +21,9 @@ fun Keypad(
     modifier: Modifier = Modifier
 ) {
     val arrangement = Arrangement.spacedBy(8.dp)
+    val configuration = LocalConfiguration.current
+    val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -28,21 +33,32 @@ fun Keypad(
             listOf(1, 2, 3).map {
                 KeypadButton(onClick = { onClick(it) }, text = it.toString())
             }
+            if (!isPortrait) {
+                KeypadButton(onClick = { onClick(0) }, text = "0")
+            }
         }
         Row(horizontalArrangement = arrangement) {
             listOf(4, 5, 6).map {
                 KeypadButton(onClick = { onClick(it) }, text = it.toString())
+            }
+            if (!isPortrait) {
+                KeypadButton(onClick = { onClick(-1) }, text = "<")
             }
         }
         Row(horizontalArrangement = arrangement) {
             listOf(7, 8, 9).map {
                 KeypadButton(onClick = { onClick(it) }, text = it.toString())
             }
+            if (!isPortrait) {
+                KeypadButton(onClick = { onClick(-2) }, text = "Go")
+            }
         }
-        Row(horizontalArrangement = arrangement) {
-            KeypadButton(onClick = { onClick(-1) }, text = "<")
-            KeypadButton(onClick = { onClick(0) }, text = "0")
-            KeypadButton(onClick = { onClick(-2) }, text = "Go")
+        if (isPortrait) {
+            Row(horizontalArrangement = arrangement) {
+                KeypadButton(onClick = { onClick(-1) }, text = "<")
+                KeypadButton(onClick = { onClick(0) }, text = "0")
+                KeypadButton(onClick = { onClick(-2) }, text = "Go")
+            }
         }
     }
 }
@@ -53,7 +69,7 @@ fun KeypadButton(
     enabled: Boolean = true,
     onClick: () -> Unit
 ) {
-    val size = 100.dp
+    val size = 90.dp
     Button(
         onClick = onClick,
         enabled = enabled,

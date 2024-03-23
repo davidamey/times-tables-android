@@ -12,6 +12,7 @@ class GameViewModel : ViewModel() {
         val sum: String = "",
         val round: Int = 0,
         val score: Int = 0,
+        val streak: Int = 0,
         val isLastGuessWrong: Boolean = false,
         val isGameComplete: Boolean = false
     )
@@ -21,6 +22,7 @@ class GameViewModel : ViewModel() {
 
     private var target = Triple(0, 0, 0)
     private var currentGuess = 0
+    private var currentStreak = 0
 
     init {
         resetGame()
@@ -53,17 +55,19 @@ class GameViewModel : ViewModel() {
                 currentGuess.toString()
             }
             with(target) {
-                current.copy(sum = "$first x $second = $ans", isLastGuessWrong = false)
+                current.copy(sum = "$first x $second = $ans", isLastGuessWrong = false, streak = currentStreak)
             }
         }
     }
 
     private fun checkAnswer() {
         if (currentGuess == target.third) {
+            currentStreak++
             nextSum()
         } else {
+            currentStreak = 0
             _uiState.update { current ->
-                current.copy(isLastGuessWrong = true)
+                current.copy(isLastGuessWrong = true, streak = currentStreak)
             }
         }
     }
