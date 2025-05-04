@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,9 +21,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import uk.org.amey.mobile.timestables.ui.theme.TimesTablesTheme
 import uk.org.amey.mobile.timestables.ui.widgets.Keypad
+import uk.org.amey.mobile.timestables.ui.widgets.StreakRow
 
 @Composable
-fun GameScreen(viewModel: GameViewModel = viewModel()) {
+fun GameScreen() {
+    val viewModel: GameViewModel = viewModel()
+
     val uiState by viewModel.uiState.collectAsState()
     val configuration = LocalConfiguration.current
 
@@ -36,14 +38,13 @@ fun GameScreen(viewModel: GameViewModel = viewModel()) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Card(
-                modifier = Modifier.align(Alignment.End).padding(horizontal = 8.dp)
-            ) {
-                Text(
-                    text = "Streak: ${String.format("%03d", uiState.streak)}",
-                    modifier = Modifier.padding(8.dp)
-                )
-            }
+            StreakRow(
+                current = uiState.streak,
+                best = uiState.bestStreak,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
+            )
             Row(
                 modifier = Modifier.weight(1f),
                 horizontalArrangement = Arrangement.Center,
@@ -57,7 +58,9 @@ fun GameScreen(viewModel: GameViewModel = viewModel()) {
                     text = uiState.sum,
                     fontSize = 48.sp,
                     color = if (uiState.isLastGuessWrong) Color.Red else Color.Unspecified,
-                    modifier = Modifier.weight(1f).padding(start = 16.dp)
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 16.dp)
                 )
             }
         }
@@ -69,14 +72,13 @@ fun GameScreen(viewModel: GameViewModel = viewModel()) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Card(
-                modifier = Modifier.align(Alignment.End).padding(horizontal = 8.dp)
-            ) {
-                Text(
-                    text = "Streak: ${String.format("%03d", uiState.streak)}",
-                    modifier = Modifier.padding(8.dp)
-                )
-            }
+            StreakRow(
+                current = uiState.streak,
+                best = uiState.bestStreak,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
+            )
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.Center
@@ -95,7 +97,17 @@ fun GameScreen(viewModel: GameViewModel = viewModel()) {
             )
         }
     }
+}
 
+@Preview(
+    showBackground = true,
+    device = "spec:width=411dp,height=891dp,dpi=420,isRound=false,chinSize=0dp,orientation=portrait"
+)
+@Composable
+fun GameScreenPreview() {
+    TimesTablesTheme {
+        GameScreen()
+    }
 }
 
 @Preview(
@@ -103,7 +115,7 @@ fun GameScreen(viewModel: GameViewModel = viewModel()) {
     device = "spec:width=411dp,height=891dp,dpi=420,isRound=false,chinSize=0dp,orientation=landscape"
 )
 @Composable
-fun GameScreenPreview() {
+fun GameScreenPreviewLandscape() {
     TimesTablesTheme {
         GameScreen()
     }
