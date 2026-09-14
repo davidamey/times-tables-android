@@ -32,7 +32,6 @@ class GameViewModel @Inject constructor(
     private var target = Triple(0, 0, 0)
 
     private val maxStreak = preferences.maxStreak.stateIn(viewModelScope, SharingStarted.Lazily, 0)
-//    private val maxStreak = MutableStateFlow(0)
     private val currentGuess = MutableStateFlow(0)
     private val currentStreak = MutableStateFlow(0)
     private val lastGuessWrong = MutableStateFlow(false)
@@ -86,7 +85,6 @@ class GameViewModel @Inject constructor(
             currentStreak.value++
             if (currentStreak.value > maxStreak.value) {
                 viewModelScope.launch {
-//                    maxStreak.value = currentStreak.value
                     preferences.setMaxStreak(currentStreak.value)
                 }
             }
